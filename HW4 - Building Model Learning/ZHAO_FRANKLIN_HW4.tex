@@ -1,0 +1,403 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry} 
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb,amsmath}
+\usepackage{listings}
+\usepackage{titling}
+\usepackage{color}
+\usepackage{enumitem}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{diagbox}
+\usepackage{float}
+\geometry{letterpaper}
+\linespread{1.1}% \geometry{landscape} % rotated page geometry
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+\lstset{style=mystyle}
+\setlength{\droptitle}{1cm}
+\title{HW 4: Forecasting Residential Electricity Power Consumption}
+\date{4 Apr. 2018} 
+\author{Franklin Zhao \\ SID: 3033030808}
+
+\begin{document}
+	
+	\maketitle
+	\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+	\renewcommand\theequation{\arabic{equation}}
+	\renewcommand{\figurename}{Fig.}
+	\renewcommand\thesection{Problem \arabic{section}:}
+	\renewcommand\thesubsection{(\alph{subsection})}
+	\onehalfspacing
+	
+\section{Exploratory Data Analysis}
+\subsection{}
+The plot is shown in Figure~\ref{fig:1a}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{1a.png}
+	\vspace{-1cm}      
+	\caption{Average hourly energy consumption for each building}
+	\label{fig:1a}
+\end{figure}
+\subsection{}
+\noindent From Figure~\ref{fig:1a} we notice that \textbf{Building} $\bf{6}$ has abnormally high variance. Running the solution code we also notice that \textbf{Building} $\bf{6}$ has moments of negative power consumption, and we are going to remove this building from our analysis.
+\subsection{}
+The plots are shown in Figure~\ref{fig:1c1}-\ref{fig:1c7}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{1c1.png}
+	\vspace{-1cm}      
+	\caption{Sunday hourly energy consumption load shapes vs. hour}
+	\label{fig:1c1}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{1c2.png}
+	\vspace{-1cm}      
+	\caption{Monday hourly energy consumption load shapes vs. hour}
+	\label{fig:1c2}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{1c3.png}
+	\vspace{-1cm}      
+	\caption{Tuesday hourly energy consumption load shapes vs. hour}
+	\label{fig:1c3}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{1c4.png}
+	\vspace{-1cm}      
+	\caption{Wednesday hourly energy consumption load shapes vs. hour}
+	\label{fig:1c4}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{1c5.png}
+	\vspace{-1cm}      
+	\caption{Thursday hourly energy consumption load shapes vs. hour}
+	\label{fig:1c5}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{1c6.png}
+	\vspace{-1cm}      
+	\caption{Friday hourly energy consumption load shapes vs. hour}
+	\label{fig:1c6}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{1c7.png}
+	\vspace{-1cm}      
+	\caption{Saturday hourly energy consumption load shapes vs. hour}
+	\label{fig:1c7}
+\end{figure}
+\noindent From the plots we notice that although data overall seems kind of messy, it is quite clear that the average hourly enery consumption looks similar across different weekdays and the trend seems the same. Also, there are roughly 2 peaks around 8 a.m. and 8 p.m., indicating that people tend to use more electricity during the morning and evening.
+\newpage
+\section{Average Model}
+\subsection{}
+The plots are shown in Figure~\ref{fig:2a1}-\ref{fig:2a7}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{2a1.png}
+	\vspace{-1cm}      
+	\caption{Sunday hourly energy consumption load shapes vs. hour (test data)}
+	\label{fig:2a1}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{2a2.png}
+	\vspace{-1cm}      
+	\caption{Monday hourly energy consumption load shapes vs. hour (test data)}
+	\label{fig:2a2}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{2a3.png}
+	\vspace{-1cm}      
+	\caption{Tuesday hourly energy consumption load shapes vs. hour (test data)}
+	\label{fig:2a3}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{2a4.png}
+	\vspace{-1cm}      
+	\caption{Wednesday hourly energy consumption load shapes vs. hour (test data)}
+	\label{fig:2a4}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{2a5.png}
+	\vspace{-1cm}      
+	\caption{Thursday hourly energy consumption load shapes vs. hour (test data)}
+	\label{fig:2a5}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{2a6.png}
+	\vspace{-1cm}      
+	\caption{Friday hourly energy consumption load shapes vs. hour (test data)}
+	\label{fig:2a6}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{2a7.png}
+	\vspace{-1cm}      
+	\caption{Saturday hourly energy consumption load shapes vs. hour (test data)}
+	\label{fig:2a7}
+\end{figure}
+\subsection{}
+The result of MAE for Average model is shown as follow:
+\begin{verbatim}
+MAE for DoW:
+Sunday       0.072854
+Monday       0.108930
+Tuesday      0.079239
+Wednesday    0.084258
+Thursday     0.067724
+Friday       0.062153
+Saturday     0.079013
+
+MAE for the entire week: 0.0791671972417
+\end{verbatim}
+From the result above we notice that \textbf{Monday} has the largest MAE and \textbf{Friday} has the smallest MAE.
+\newpage
+\section{Autoregressive with eXogeneous Inputs \\Model (ARX)}
+\subsection{}
+From the equation given in the homework, the following equation can be derived:
+\begin{equation}
+\begin{array}{ll}
+\hat{P}_{arx}(k)-\hat{P}_{avg}(k)&=\sum_{l=1}^L\alpha_l\cdot P(k-l)\\
+&=[P(k-1),P(k-2),...,P(k-L)]\cdot[\alpha_1,\alpha_2,...\alpha_L]^T
+\end{array}
+\end{equation}
+Combine the equation of each data point $(k)$ into a matrix form: $Y=\Phi\theta$, and we get:
+\begin{equation}
+Y=\hat{P}_{arx}-\hat{P}_{avg}
+\end{equation} 
+\begin{equation}
+\Phi = \left[
+\begin{array}{cccc}
+P(L)&P(L-1)&...&P(1)\\
+P(L+1)&P(L)&...&P(2)\\
+\vdots&\vdots&\vdots&\vdots\\
+P(n-1)&P(n-2)&...&P(n-L)
+\end{array}
+\right]
+\end{equation}
+\begin{equation}
+\theta=[\alpha_1,\alpha_2,...\alpha_L]^T
+\end{equation}
+where $Y$ is a vector $\in\mathbb{R}^{(n-L)\times1}$ corresponds to the data point $L+1$ to $n$, and $\Phi$ is a matrix $\in\mathbb{R}^{(n-L)\times L}$ (n is the number of data points).
+\subsection{}
+The objective function is derived as follow:
+\begin{equation}
+\min_{\theta}||\Phi\theta-(Y_{train}-\hat{P}_{avg})||_2^2
+\end{equation}
+where $Y_{train}$ refers to the observations (vector) in the training set.\\\\ 
+If we compute the Hessian with respect to $\theta$, we could get:
+\begin{equation}
+H=2\Phi^T\Phi
+\end{equation}
+which is a positive semi-definite matrix. Hence, this is a convex program.
+\subsection{}
+The problem is basically an OLS problem which has a closed-form solution:
+\begin{equation}
+\alpha^*=(\Phi^T\Phi)\Phi^T(Y_{train}-\hat{P}_{avg})
+\end{equation} 
+Hence, running the code, the following results are obtained:
+\begin{verbatim}
+values of alpha stars:
+alpha_1^*   -0.064908
+alpha_2^*   -0.042012
+alpha_3^*    0.234507
+\end{verbatim}
+\subsection{}
+The plots are shown in Figure~\ref{fig:3d1}-\ref{fig:3d7}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{3d1.png}
+	\vspace{-1cm}      
+	\caption{Sunday hourly energy consumption load shapes vs. hour (adding ARX)}
+	\label{fig:3d1}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{3d2.png}
+	\vspace{-1cm}      
+	\caption{Monday hourly energy consumption load shapes vs. hour (adding ARX)}
+	\label{fig:3d2}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{3d3.png}
+	\vspace{-1cm}      
+	\caption{Tuesday hourly energy consumption load shapes vs. hour (adding ARX)}
+	\label{fig:3d3}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{3d4.png}
+	\vspace{-1cm}      
+	\caption{Wednesday hourly energy consumption load shapes vs. hour (adding ARX)}
+	\label{fig:3d4}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{3d5.png}
+	\vspace{-1cm}      
+	\caption{Thursday hourly energy consumption load shapes vs. hour (adding ARX)}
+	\label{fig:3d5}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{3d6.png}
+	\vspace{-1cm}      
+	\caption{Friday hourly energy consumption load shapes vs. hour (adding ARX)}
+	\label{fig:3d6}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{3d7.png}
+	\vspace{-1cm}      
+	\caption{Saturday hourly energy consumption load shapes vs. hour (adding ARX)}
+	\label{fig:3d7}
+\end{figure}
+\newpage
+\noindent The result of MAE for ARX model is shown as follow:
+\begin{verbatim}
+MAE for DoW:
+Sunday       0.078284
+Monday       0.108630
+Tuesday      0.083678
+Wednesday    0.086059
+Thursday     0.059289
+Friday       0.062893
+Saturday     0.076177
+
+MAE for the entire week: 0.0792873276726
+\end{verbatim}
+\newpage
+\section{Neural Network Model (NN)}
+\subsection{}
+The optimization variables are just the weights $\bf{\omega}$.
+\subsection{}
+\begin{equation}
+\frac{\partial J}{\partial\omega}=\sum_{i=1}^m\frac{\partial J}{\partial\delta^{(i)}}\cdot\frac{\partial\delta^{(i)}}{\partial f}\cdot\frac{\partial f}{\partial z}\cdot\frac{\partial z}{\partial\omega}
+\end{equation}
+where
+\begin{align}
+\delta^{(i)}=y^{(i)}-f(\omega^Tx^{(i)})\\
+f=tanh\\
+z=\omega^Tx
+\end{align}
+\begin{equation}
+\frac{\partial J}{\partial\delta^{(i)}}=\delta^{(i)},\ \ \ \frac{\partial\delta^{(i)}}{\partial f}=-1,\ \ \ \frac{\partial f}{\partial z}=1-tanh^2(z),\ \ \ \frac{\partial z}{\partial\omega}=x 
+\end{equation}
+Hence, the gradient descent can be expressed as follow:
+\begin{equation}\label{eq:GD}
+\omega^{k+1}=\omega^k+\gamma\sum_{i=1}^m\left[(y^{(i)}-tanh((\omega^k)^Tx^{(i)}))\cdot(1-tanh^2((\omega^k)^Tx^{(i)}))\cdot x^{(i)}\right]
+\end{equation}
+\subsection{}
+To increase the computation efficiency, I first vectorized Equation~(\ref{eq:GD}), and set the maximum iteration number 300. The learning rate is assigned to be decaying with the expression $1/(100+i)$ where $i$ is the iteration number. After running the code, the following results are obtained:
+\begin{verbatim}
+values of omega stars:
+omega_1^*   -0.032266
+omega_2^*    0.001350
+omega_3^*    0.156858
+\end{verbatim}
+\newpage
+\subsection{}
+The plots are shown in Figure~\ref{fig:4d1}-\ref{fig:4d7}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{4d1.png}
+	\vspace{-1cm}      
+	\caption{Sunday hourly energy consumption load shapes vs. hour (adding NN)}
+	\label{fig:4d1}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{4d2.png}
+	\vspace{-1cm}      
+	\caption{Monday hourly energy consumption load shapes vs. hour (adding NN)}
+	\label{fig:4d2}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{4d3.png}
+	\vspace{-1cm}      
+	\caption{Tuesday hourly energy consumption load shapes vs. hour (adding NN)}
+	\label{fig:4d3}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{4d4.png}
+	\vspace{-1cm}      
+	\caption{Wednesday hourly energy consumption load shapes vs. hour (adding NN)}
+	\label{fig:4d4}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{4d5.png}
+	\vspace{-1cm}      
+	\caption{Thursday hourly energy consumption load shapes vs. hour (adding NN)}
+	\label{fig:4d5}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{4d6.png}
+	\vspace{-1cm}      
+	\caption{Friday hourly energy consumption load shapes vs. hour (adding NN)}
+	\label{fig:4d6}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{4d7.png}
+	\vspace{-1cm}      
+	\caption{Saturday hourly energy consumption load shapes vs. hour (adding NN)}
+	\label{fig:4d7}
+\end{figure}
+\noindent The result of MAE for NN model is shown as follow:
+\begin{verbatim}
+MAE for DoW:
+Sunday       0.078262
+Monday       0.109701
+Tuesday      0.083350
+Wednesday    0.087587
+Thursday     0.061653
+Friday       0.064206
+Saturday     0.079404
+
+MAE for the entire week: 0.0805947512505
+\end{verbatim}
+\end{document}
